@@ -1,0 +1,48 @@
+Traveling Salesman Problem
+
+Implement the two TSP heuristics of Section 1.1 (page 5). Which of them gives better 
+solutions in practice? Can you devise a heuristic that works better than both of them?
+
+Input: A set S of n points in a plane.
+Output: What is the shortest cycle tour that visits each point in the set S?
+
+Heuristic 1: Nearest Neighbor 
+Starting from some point, p0, we walk first to its nearest neighbor p1. From 
+p1, we walk to its nearest unvisited neighbor, thus excluding p0 as a candidate. 
+We now repeat this until we run out of unvisited points, after which we return 
+to p0 to close off the tour.
+
+Heuristic 2: Closest Pair
+Repeatedly connect the closest pair of endpoints whose connection will not create a 
+problem, such as the premature termination of the cycle. Each vertex begins as its own 
+single vertex chain. After merging everything together, we will end up with a single chain
+containing all the points in it. Connecting the final two endpoints gives us a cycle.
+
+Test Cases
+Points in a line with the following distances from zero:
+    -21, -5, -1, 0, 1, 3, 11
+
+Two rows of equally spaced points, with the rows slightly closer together (distance 1 - e) 
+than the neighboring points are spaced in each row (distance 1 + e).
+
+Randomly generated test cases that are small enough to compute optimal solutions
+for.
+
+Notes
+Output of the program will be an ordered list of the points visited, the length of the tour, 
+and the runtime for that instance.
+
+Pytest is likely overkill, so let's just setup a file to test with.
+
+What do we need?
+    A plane that represents a collection of points.
+    Points (A tuple will likely suffice)
+    The various algorithms
+    Tests that can be run on each algorithm
+        Maybe just pass in the name of the function we wish to test as a parameter? 
+    A correct (if inefficient!) version of the algorithm 
+        Actually, if the goal is to compare the relative efficiency of the algorithms,
+        this is not needed
+    A generator for planes containing a random set of points.
+
+
