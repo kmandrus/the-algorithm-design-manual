@@ -18,31 +18,17 @@ problem, such as the premature termination of the cycle. Each vertex begins as i
 single vertex chain. After merging everything together, we will end up with a single chain
 containing all the points in it. Connecting the final two endpoints gives us a cycle.
 
-Test Cases
-Points in a line with the following distances from zero:
-    -21, -5, -1, 0, 1, 3, 11
+Test Cases: randomly generated collections of points in a plane
 
-Two rows of equally spaced points, with the rows slightly closer together (distance 1 - e) 
-than the neighboring points are spaced in each row (distance 1 + e).
+Output: Ordered of the visited points, the length of the tour, and runtime.
 
-Randomly generated test cases that are small enough to compute optimal solutions
-for.
-
-Notes
-Output of the program will be an ordered list of the points visited, the length of the tour, 
-and the runtime for that instance.
-
-Pytest is likely overkill, so let's just setup a file to test with.
 
 What do we need?
     A plane that represents a collection of points.
     Points (A tuple will likely suffice)
-    The various algorithms
+    The algorithms
     Tests that can be run on each algorithm
         Maybe just pass in the name of the function we wish to test as a parameter? 
-    A correct (if inefficient!) version of the algorithm 
-        Actually, if the goal is to compare the relative efficiency of the algorithms,
-        this is not needed
     A generator for planes containing a random set of points.
 
 
