@@ -31,4 +31,44 @@ What do we need?
         Maybe just pass in the name of the function we wish to test as a parameter? 
     A generator for planes containing a random set of points.
 
+The implementation of the closest pair is mired in complications. I think this could
+be improved by picking a data structure that more closely mirrors the "chain" of verticies. 
+Currently, I'm using a doubly linked list, and it's possible that's still the best option. I 
+may only need to add a few more helper methods. However, let's go back to brainstorming to 
+consider a few more options:
+    Doubly Linked List
+    Ordered array of edges
+    Dictionary of points and their successors
+    List of points
+
+Doubly Linked List
+    add magic methods for iteration, membership, length, and converstion to list
+    link_to_head, link_to_tail methods
+
+Perhaps my real problem is how I store the chains. The heruristic wants to continue 
+iterating until all the chains have merged into one. How can I represent this?
+    Adding and removing chains from the set of chains
+    Checking until the length of a single chain has reached the target
+
+How do I keep track of the candidate chains? It would be nice if when I merged two 
+chains, they were automatically merged within their container. That might mean the 
+container is a list of all verticies that dynamically computes which chains are present
+based upon the connections.
+
+Another idea is to move to a more functional model. When we connect verticies with an
+edge, we actually create a new chain. Determining membership in the set of chains becomes
+an issue again though. The easiest way is to, again, have the container of chains hold
+the logic for linking and unlinking the verticies. When chains are modified, an entirely
+new version of the container is returned each time. What would we name this container?
+Is is simply a graph? Like, a graph as in a collection of verticies and edges?
+
+Using a "graph" object to manage the verticies and edges is the most promising idea 
+among the bunch. What's the interface to this graph?
+    get_verticies - a list of all verticies in the graph
+    is_connected - determines if two points are connected anywhere by an edge
+    is_adjacent - determines if two verticies are immediately connected by an edge
+    get_connected_verticies - given a vertex, return all verticies connected by an edge
+    get_adjacent_verticies - given a vertex, return its neighbors connected by an edge
+    connect - connects two verticies with an edge
+    get_chains - all distinct chains in the graph
 
