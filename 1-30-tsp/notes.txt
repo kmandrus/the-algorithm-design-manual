@@ -71,4 +71,15 @@ among the bunch. What's the interface to this graph?
     get_adjacent_verticies - given a vertex, return its neighbors connected by an edge
     connect - connects two verticies with an edge
     get_chains - all distinct chains in the graph
+    length - compute the length between two verticies
 
+Interface for a "chain," or a collection of verticies connected by a single edge.
+    head
+    tail
+    verticies - list of verticies ordered from head to tail
+    is_member(vertex)
+
+Interface for an "edge" - may be unneeded!
+    start
+    end
+    length

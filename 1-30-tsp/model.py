@@ -39,33 +39,36 @@ class Link:
         self.next = next
     
     @property
-    def first(self):
+    def head(self):
         current_link = self
         while current_link.previous:
             current_link = current_link.previous
         return current_link
 
     @property
-    def last(self):
+    def tail(self):
         current_link = self
         while current_link.next:
             current_link = current_link.next
         return current_link
     
     def to_list(self):
-        current_node = self.first
+        current_node = self.head
         node_list = [current_node]
         while current_node.next:
             node_list.append(current_node.value)
         return node_list
 
     def is_member(self, other) -> bool: 
-        current = self.first
+        current = self.head
         while current.next: 
             if current.value == other.value:
                 return True
         return False
 
+
+# I think we should delete this, in favor of a list or dictionary. If the graph doesn't 
+# use this Edge class, it will confuse me down the line.
 class Edge:
     def __init__(self, start: Link, end: Link):
         self.start = start 
@@ -81,10 +84,10 @@ class Edge:
             self.end.previous = self.start
         else:
             raise RuntimeError("cannot connect edge, no empty connection points")
-        return self.start.first
+        return self.start.head
 
 
-# Heuristics
+# Heuristics - split these into their own file
 def nearest_neighbor(points: Set[Tuple[int,int]]) -> List[Tuple[int,int]]:
     remaining_points = points.copy()
     current_point = remaining_points.pop()
@@ -108,14 +111,14 @@ def nearest_neighbor(points: Set[Tuple[int,int]]) -> List[Tuple[int,int]]:
             
 
 def find_shortest_new_edge(chains: List[Link]) -> Edge:
-    min_edge = Edge(chains[0].first, chains[-1].first)
+    min_edge = Edge(chains[0].head, chains[-1].head)
     for i, chain in enumerate(chains):
         for next_chain in chains[i+1:]:
             for edge in [
-                Edge(chain.first, next_chain.first), 
-                Edge(chain.first, next_chain.last), 
-                Edge(chain.last, next_chain.first), 
-                Edge(chain.last, next_chain.last),
+                Edge(chain.head, next_chain.head), 
+                Edge(chain.head, next_chain.tail), 
+                Edge(chain.tail, next_chain.head), 
+                Edge(chain.tail, next_chain.tail),
             ]:
                 if edge.length < min_edge.length:
                     min_edge = edge
@@ -124,6 +127,7 @@ def find_shortest_new_edge(chains: List[Link]) -> Edge:
 
 def closest_pair(points: Set[Tuple[int, int]]) -> List[Tuple[int,int]]:
     chains = { Link(point) for point in points }
+    # tweak condition for new "graph" object
     while len(chains) > 1:
         new_edge = find_shortest_new_edge(list(chains))
         remove_list = []
