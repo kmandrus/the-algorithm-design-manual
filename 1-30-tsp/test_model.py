@@ -1,9 +1,12 @@
-import pdb
 import pytest
 from math import sqrt
 
-from model import compute_tour_length, nearest_neighbor, closest_pair
+from model import compute_tour_length, Graph
 
+
+@pytest.fixture
+def line_slope_1():
+    return {"verticies": [(1,1), (2,2), (3,3)], "edges": [{(1,1), (2,2)}, {(2,2), (3,3)}]}
 
 def test_horizontal_compute_tour_length():
     tour = [(1,1), (1,2), (1,3)]
@@ -17,12 +20,13 @@ def test_diagonal_compute_tour_length():
     assert compute_tour_length(tour) == expected_length
 
 
-def test_nearest_neighbor():
-    points = {(3,1), (1,1), (2,1), (4,1)}
-    expected_tour = [(3,1), (4,1), (2,1), (1,1)]
-    assert nearest_neighbor(points) == expected_tour
+def test_init_graph_verticies(line_slope_1):
+    graph = Graph(line_slope_1["verticies"])
+    
+    assert graph.verticies == line_slope_1["verticies"]
 
-def test_closest_pair():
-    points = {(3,1), (1,1), (2,1), (4,1)}
-    expected_tour = [(3,1), (4,1), (2,1), (1,1)]
-    assert closest_pair(points) == expected_tour
+
+def test_init_graph_edges(line_slope_1):
+    graph = Graph(line_slope_1["verticies"], line_slope_1["edges"])
+    
+    assert graph.edges == line_slope_1["edges"]

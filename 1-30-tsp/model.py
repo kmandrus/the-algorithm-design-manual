@@ -1,7 +1,6 @@
-import pdb
-from math import dist, inf
+from math import dist
 from random import randrange
-from typing import List, Tuple, Set, Optional
+from typing import List, Tuple
 
 
 # Helpers
@@ -31,11 +30,10 @@ def compute_tour_length(tour: List[Tuple[int,int]]) -> float:
 
 class Link:
     """
-    A node for a doubly linked list. I think - it's been awhile since I've messed with these.
+    A node for a linked list.
     """
-    def __init__(self, value, previous = None, next = None):
+    def __init__(self, value, next = None):
         self.value = value
-        self.previous = previous
         self.next = next
     
     @property
@@ -66,7 +64,10 @@ class Link:
                 return True
         return False
 
-
+class LinkedList:
+    def __init__(self):
+        pass
+    
 # I think we should delete this, in favor of a list or dictionary. If the graph doesn't 
 # use this Edge class, it will confuse me down the line.
 class Edge:
@@ -87,56 +88,45 @@ class Edge:
         return self.start.head
 
 
-# Heuristics - split these into their own file
-def nearest_neighbor(points: Set[Tuple[int,int]]) -> List[Tuple[int,int]]:
-    remaining_points = points.copy()
-    current_point = remaining_points.pop()
-    tour = [current_point]
-    while len(remaining_points) > 0:
-        selected_point = None
-        min_distance = inf
-        for point in remaining_points: 
-            if not selected_point: 
-                selected_point = point 
-                min_distance = dist(current_point, point)
-            else:
-                distance = dist(current_point, point)
-                if distance < min_distance:
-                    selected_point = point
-                    min_distance = distance
-        tour.append(selected_point)
-        remaining_points.remove(selected_point)
-        current_point = selected_point
-    return tour
-            
+class Graph:
+    """
+    Represents a collection of verticies and edges. 
 
-def find_shortest_new_edge(chains: List[Link]) -> Edge:
-    min_edge = Edge(chains[0].head, chains[-1].head)
-    for i, chain in enumerate(chains):
-        for next_chain in chains[i+1:]:
-            for edge in [
-                Edge(chain.head, next_chain.head), 
-                Edge(chain.head, next_chain.tail), 
-                Edge(chain.tail, next_chain.head), 
-                Edge(chain.tail, next_chain.tail),
-            ]:
-                if edge.length < min_edge.length:
-                    min_edge = edge
-    return min_edge
-             
+    A 'vertex' is a tuple of integers.
+    An 'edge' is a set of two vertices.
+    A 'chain' is a set of connected vertices without branches.
+    """
 
-def closest_pair(points: Set[Tuple[int, int]]) -> List[Tuple[int,int]]:
-    chains = { Link(point) for point in points }
-    # tweak condition for new "graph" object
-    while len(chains) > 1:
-        new_edge = find_shortest_new_edge(list(chains))
-        remove_list = []
-        for chain in chains:
-            if chain.is_member(new_edge.start) or chain.is_member(new_edge.end):
-                remove_list.append(chain)
-        for chain in remove_list:
-            chains.remove(chain)
-        chains.add(new_edge.connect())
-    return chains.pop().to_list()
-            
-        
+    def __init__(self, verticies, edges = None):
+        self._verticies = verticies
+        self._edges = edges
+
+    @property
+    def verticies(self):
+        return self._verticies
+
+    @property
+    def edges(self):
+        return self._edges
+
+    @property
+    def chains(self):
+        pass
+
+    def add(self, vertex):
+        pass
+
+    def remove(self, vertex):
+        pass
+
+    def connect(self, vertex_1, vertex_2):
+        pass
+    
+    def disconnect(self, vertex_1, vertex_2):
+        pass
+
+    def are_adjacent(self, vertex_1, vertex_2):
+        pass
+
+    def get_adjacent(self, vertex):
+        pass
